@@ -1,0 +1,40 @@
+name: PR Preview
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install MkDocs
+        run: pip install mkdocs
+
+      - name: Build site
+        run: mkdocs build -d ./site/preview/${{ github.event.number }}
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          keep_files: true
+          destination_dir: .
+
+      - name: Comment PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 プレビューサイトが公開されました！\n\n📖 確認URL: https://${context.repo.owner}.github.io/${context.repo.repo}/preview/${context.issue.number}/`
+            })
