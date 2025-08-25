@@ -53,4 +53,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          github-comment post -template "higehigehigehige"
+          github-comment post -template "hehehewhehigehigehigehige"
