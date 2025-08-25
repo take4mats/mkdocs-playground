@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: aquaproj/aqua-installer@d1fe50798dbadd4eb5b98957290ca175f6b4870f # v4.0.2
         with:
           aqua_version: v2.51.2
@@ -47,4 +48,4 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
           github-comment hide
-          github-comment post -template "🚀 Preview Site: ${{ steps.pages-url.outputs.result }}preview/${{ github.event.number }}"
+          github-comment post -template "🚀 Preview Site: ${{ steps.pages-url.outputs.result }}preview/${{ github.event.number }}/"
