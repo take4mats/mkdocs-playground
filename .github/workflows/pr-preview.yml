@@ -47,4 +47,4 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
           github-comment hide
-          github-comment post -template "🚀 Preview Site: ${{ steps.pages-url.outputs.result }}preview/${{ github.event.number }}/"
+          github-comment post -template "🚀 Preview Site: ${{ steps.pages-url.outputs.result }}preview/${{ github.event.number }}"
