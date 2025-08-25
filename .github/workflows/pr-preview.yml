@@ -49,3 +49,8 @@ jobs:
         run: |
           github-comment hide
           github-comment post -template "🚀 Preview Site: ${{ steps.pages-url.outputs.result }}preview/${{ github.event.number }}/"
+      - name: test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          github-comment post -template "higehigehigehige"
