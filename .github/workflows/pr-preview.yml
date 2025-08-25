@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: aquaproj/aqua-installer@d1fe50798dbadd4eb5b98957290ca175f6b4870f # v4.0.2
+        with:
+          aqua_version: v2.51.2
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -28,13 +31,19 @@ jobs:
           keep_files: true
           destination_dir: .
 
-      - name: Comment PR
+      - name: Get Pages URL
+        id: pages-url
         uses: actions/github-script@v6
         with:
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
+            const pages = await github.rest.repos.getPages({
               owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `🚀 プレビューサイトが公開されました！\n\n📖 確認URL: https://${context.repo.owner}.github.io/${context.repo.repo}/preview/${context.issue.number}/`
-            })
+              repo: context.repo.repo
+            });
+            return pages.data.html_url;
+
+      - name: Comment PR
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          echo "🚀 Preview Site: ${{ steps.pages-url.outputs.result }}/preview/${{ github.event.number }}/"
